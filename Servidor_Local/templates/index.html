@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Arquivos</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            word-wrap: break-word;
+        }
+
+        table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        table th:nth-child(1),
+        table td:nth-child(1) {
+            width: 60%;
+        }
+
+        table th:nth-child(2),
+        table td:nth-child(2) {
+            width: 20%;
+        }
+
+        table th:nth-child(3),
+        table td:nth-child(3) {
+            width: 20%;
+            text-align: center;
+        }
+
+        button,
+        .download-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+            text-decoration: none;
+        }
+
+        button:hover,
+        .download-btn:hover {
+            background: #0056b3;
+        }
+
+        button.delete-btn {
+            background: red;
+        }
+
+        button.delete-btn:hover {
+            background: darkred;
+        }
+
+        .logout {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .logout:hover {
+            background: #0056b3;
+        }
+
+        form {
+            display: inline;
+        }
+
+        .admin-section {
+            background: #fef9c3;
+            border: 1px solid #ffe58f;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 20px 0;
+        }
+
+        .admin-section h2 {
+            color: #b38900;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bem-vindo, {{ current_user.username }}!</h1>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Enviar Arquivo</button>
+    </form>
+
+    {% if is_admin %}
+    <div class="admin-section">
+        <h2>Todos os Arquivos (Administrador)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome do Arquivo</th>
+                    {% if is_admin %}
+                    <th>Proprietário</th>
+                    {% endif %}
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.filename }}</td>
+                    {% if is_admin %}
+                    <td>{{ file.owner_name }}</td>
+                    {% endif %}
+                    <td>
+                        <a href="/download/{{ file.id }}" class="download-btn">Baixar</a>
+                        <form action="/delete" method="POST" style="display: inline;">
+                            <input type="hidden" name="file_id" value="{{ file.id }}">
+                            <button type="submit" class="delete-btn">Deletar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <h2>Meus Arquivos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nome do Arquivo</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.filename }}</td>
+                <td>
+                    <a href="/download/{{ file.id }}" class="download-btn">Baixar</a>
+                    <form action="/delete" method="POST" style="display: inline;">
+                        <input type="hidden" name="file_id" value="{{ file.id }}">
+                        <button type="submit" class="delete-btn">Deletar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <a href="/logout" class="logout">Sair</a>
+</body>
+
+</html>

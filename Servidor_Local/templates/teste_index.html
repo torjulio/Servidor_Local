@@ -1,0 +1,243 @@
+<html lang="pt-br">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Sistema de Gestão Escolar Zehan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="icon" href="../static/images/MTECH.png" type="image/x-icon">
+    <style>
+        footer {
+            background-color: #2563eb;
+            color: white;
+            padding: -0.05rem 0.50rem;
+            text-align: center;
+            font-size: 0.85rem;
+            margin-top: auto;
+            line-height: 1.4;
+            bottom: 0;
+        }
+
+        body {
+            zoom: 93%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            zoom: 93%;
+            table-layout: fixed; /* Adicionado para fixar o layout da tabela */
+
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd49;
+            padding: 8px;
+            overflow: hidden; /* Adicionado para ocultar o conteúdo que excede o tamanho da célula */
+            text-overflow: ellipsis; /* Adicionado para adicionar reticências ao conteúdo que excede o tamanho da célula */
+            white-space: nowrap; 
+        }
+
+        th {
+            background-color: #534f4f;
+            text-align: left;
+        }
+
+        tr:nth-child(even) {
+            background-color: #3d3a3a;
+        }
+
+        tr:hover {
+            background-color: #dddddd3f;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination button:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+
+
+</head>
+
+<body class="bg-white dark:bg-gray-700 dark:text-white bg-opacity-80 backdrop-blur-md">
+    <div class="flex">
+        <!-- Sidebar -->
+        <div class="w-64 bg-gradient-to-b from-purple-600 to-blue-500 text-white min-h-screen">
+            <div class="flex items-center justify-center py-6">
+                <img alt="" height="100" src="../static/images/MTECH.png" width="100" />
+            </div>
+            <nav class="px-6">
+                <ul>
+                    <li class="py-2">
+                        <a class="flex items-center hover:text-gray-300" href="#">
+                            <i class="fas fa-tachometer-alt mr-2"></i>
+                            Lista de Alunos
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a class="flex items-center hover:text-gray-300" href="#">
+                            <i class="fas fa-user mr-2"></i>
+                            Controle de Usuarios
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a class="flex items-center hover:text-gray-300" href="#">
+                            <i class="fas fa-book mr-2"></i>
+                            Calendário Pedagógico
+                        </a>
+                    </li>
+                    <li class="py-2">
+                        <a class="flex items-center hover:text-gray-300" href="#" id="toggleRelatorios">
+                            <i class="fas fa-file-alt mr-2"></i>
+                            Relatórios
+                        </a>
+                    </li>
+                    <ul id="relatorioItems" class="pl-4 hidden">
+                        <li class="py-2">
+                            <a class="flex items-center hover:text-gray-300" href="#">
+                                <i class="fas fa-file-alt mr-2"></i>
+                                Matrículas
+                            </a>
+                        </li>
+                        <li class="py-2">
+                            <a class="flex items-center hover:text-gray-300" href="#">
+                                <i class="fas fa-file-alt mr-2"></i>
+                                Frequência Escolar
+                            </a>
+                        </li>
+                        <li class="py-2">
+                            <a class="flex items-center hover:text-gray-300" href="#">
+                                <i class="fas fa-file-alt mr-2"></i>
+                                Evasão Escolar
+                            </a>
+                        </li>
+                    </ul>
+                    <li class="py-2">
+                        <a class="flex items-center hover:text-gray-300" href="{{ url_for('admin') }}"
+                            id="toggleRelatorios">
+                            <i class="fa fa-sign-out"></i>
+                            Sair
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+        </div>
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <header class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-blue-700 dark:text-blue-300">Bem-vindo, {{ current_user.username }}!</h1>
+
+            </header>
+
+            <div class="bg-white dark:bg-gray-800 p-6 rounded shadow">
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <input type="file" name="file" required>
+                    <button type="submit">Enviar Arquivo</button>
+                </form>
+                
+                
+                <div class="border-b mb-4">
+                </div>
+
+                {% if is_admin %}
+                <div class="admin-section">
+                    <h2>Todos os Arquivos (Administrador)</h2>
+                    <thead>
+                        <tr>
+                            <th>Nome do Arquivo</th>
+                            {% if is_admin %}
+                            <th>Proprietário</th>
+                            {% endif %}
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                        <tr>
+                            <td>{{ file.filename }}</td>
+                            {% if is_admin %}
+                            <td>{{ file.owner_name }}</td>
+                            {% endif %}
+                            <td>
+                                <a href="/download/{{ file.id }}" class="download-btn">Baixar</a>
+                                <form action="/delete" method="POST" style="display: inline;">
+                                    <input type="hidden" name="file_id" value="{{ file.id }}">
+                                    <button type="submit" class="delete-btn">Deletar</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <h2>Meus Arquivos</h2>
+                <div class="file-list">
+                    {% for file in files %}
+                    <div class="file-item">
+                        <span>{{ file.filename }}</span>
+                        <div>
+                            <a href="/download/{{ file.id }}" class="download-btn">Baixar</a>
+                            <form action="/delete" method="POST" style="display: inline;">
+                                <input type="hidden" name="file_id" value="{{ file.id }}">
+                                <button type="submit" class="delete-btn">Deletar</button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            
+                <a href="/logout" class="logout">Sair</a>
+            
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 M-Tech. Todos os direitos reservados ao Desenvolvedor.</p>
+        </div>
+    </footer>
+    <script src="../static/app.js"></script>
+
+</body>
+
+</html>

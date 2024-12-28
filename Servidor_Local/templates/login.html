@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+</head>
+<body>
+    <div class="container">
+        <video id="backgroundVideo" autoplay muted loop class="backgroundVideo">
+            <source src="../static/122.mp4" type="video/mp4">
+            Seu navegador não suporta o elemento de vídeo.
+        </video>
+        </video>
+        <div class="content first-content">
+            <div class="first-column">
+                <h2 class="title title-primary">Bem vindo de volta!</h2>
+                <p class="description description-primary">Para se manter conectado conosco</p>
+                <p class="description description-primary">por favor faça login com suas informações pessoais</p>
+                <button id="signin" class="btn btn-primary" onclick="showLogin()">Entrar</button>
+            </div>
+            <div class="second-column">
+                <h2 class="title title-second">Crie sua Conta</h2>
+                <p class="description description-second">Digite suas informações abaixo:</p>
+                <form class="form" action="/register" method="POST">
+                    <label class="label-input" for="">
+                        <i class="far fa-user icon-modify"></i>
+                        <input type="text" name="username" placeholder="Digite seu Nome" required>
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="far fa-envelope icon-modify"></i>
+                        <input type="email" name="email" placeholder="Digite seu Email" required>
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="fas fa-lock icon-modify"></i>
+                        <input type="password" name="password" placeholder="Digite sua senha" required>
+                    </label>
+
+                    <button class="btn btn-second" type="submit">OK</button>
+                    
+                    <div id="popup" class="popup hidden">
+                        <p>Cadastro realizado com sucesso!</p>
+                        <button id="close-popup">Carregando</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="content second-content">
+            <div class="first-column">
+                <h2 class="title title-primary">Olá amigo!</h2>
+                <p class="description description-primary">Insira seus dados pessoais</p>
+                <p class="description description-primary">e comece sua jornada conosco</p>
+                <button id="signup" class="btn btn-primary" onclick="showRegister()">Registrar</button>
+            </div>
+            <div class="second-column">
+                <h2 class="title title-second">Entre no Servidor</h2>
+                <form class="form" action="/login" method="POST">
+                    <label class="label-input" for="">
+                        <i class="far fa-envelope icon-modify"></i>
+                        <input type="text" name="username" placeholder="Digite seu Nome" required>
+                    </label>
+
+                    <label class="label-input" for="">
+                        <i class="fas fa-lock icon-modify"></i>
+                        <input type="password" name="password" placeholder="Digite sua senha" required>
+                    </label>
+
+                    <a class="password" href="#">Esqueceu a sua Senha?</a>
+                    <button class="btn btn-second" type="submit">Entrar</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/app.js"></script>
+
+</body>
+</html>
